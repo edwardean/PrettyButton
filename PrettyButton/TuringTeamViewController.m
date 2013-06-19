@@ -44,4 +44,8 @@
     UISlider *slider = (UISlider *)sender;
     self.coolButton.brightness = slider.value;
 }
+
+- (IBAction)gotoGitHub:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/edwardean/PrettyButton"]];
+}
 @end

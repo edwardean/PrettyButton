@@ -41,9 +41,17 @@
 //    CGContextSetFillColorWithColor(context, color.CGColor);
 //    //用当前图形上下文中的颜色填充指定的矩形
 //    CGContextFillRect(context, self.bounds);
-    
-    UIColor *outerTop = [UIColor colorWithHue:self.hue saturation:self.saturation brightness:self.brightness alpha:1.0];
+    UIColor *blackColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+    UIColor *highlightStart = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.4];
+    UIColor *highlightStop = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1];
     UIColor *shadowColor = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5];
+    
+    UIColor *outerTop = [UIColor colorWithHue:self.hue saturation:self.saturation brightness:1.0*self.brightness alpha:1.0];
+    UIColor *outerBottom = [UIColor colorWithHue:self.hue saturation:self.saturation brightness:0.80*self.brightness alpha:1.0];
+    UIColor *innerStroke = [UIColor colorWithHue:self.hue saturation:self.saturation brightness:0.80*self.brightness alpha:1.0];
+    UIColor *innerTop = [UIColor colorWithHue:self.hue saturation:self.saturation brightness:0.90*self.brightness alpha:1.0];
+    UIColor *innerBottom = [UIColor colorWithHue:self.hue saturation:self.saturation brightness:0.70*self.brightness alpha:1.0];
+    
     
     CGFloat outerMargin = 5.0f;
     //在原来的矩形内部挖出来一个边缘比原矩形小5像素的小矩形，5个像素的边缘后面绘制阴影
@@ -59,6 +67,12 @@
         CGContextFillPath(context);
         CGContextRestoreGState(context);
     }
+    
+    CGContextSaveGState(context);
+    CGContextAddPath(context, outerPath);
+    CGContextClip(context);
+    drawGlossAndGradient(context, outerRect, outerTop.CGColor, outerBottom.CGColor);
+    CGContextRestoreGState(context);
     
 }
 

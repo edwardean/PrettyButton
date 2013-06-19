@@ -17,4 +17,5 @@
 - (IBAction)hueValueChanged:(id)sender;
 - (IBAction)saturationValueChanged:(id)sender;
 - (IBAction)brightnessValueChanged:(id)sender;
+- (IBAction)gotoGitHub:(id)sender;
 @end
