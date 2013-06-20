@@ -16,6 +16,11 @@
         _hue = 1.0;
         _saturation = 1.0;
         _brightness = 1.0;
+        __block typeof(self) weakSelf = self;
+        _block = ^{
+            weakSelf->_myName = @"LiHang";
+            weakSelf.yourName = @"Xue";
+        };
     }
     return self;
 }
@@ -59,6 +64,14 @@
     //调用自定义的方法给矩形添加四个圆角,注意第二个参数，数越大圆角越大
     CGMutablePathRef outerPath = createRoundedRectForRect(outerRect, 6.0);
     
+    CGFloat innerMargin = 3.0f;
+    CGRect innerRect = CGRectInset(outerRect, innerMargin, innerMargin);
+    CGMutablePathRef innerPath = createRoundedRectForRect(innerRect, 6.0);
+    
+    CGFloat highlightMargin = 2.0f;
+    CGRect highlightRect = CGRectInset(outerRect, highlightMargin, highlightMargin);
+    CGMutablePathRef highlightPath = createRoundedRectForRect(highlightRect, 6.0);
+    
     if (self.state != UIControlStateHighlighted) {
         CGContextSaveGState(context);
         CGContextSetFillColorWithColor(context, outerTop.CGColor);
@@ -73,6 +86,42 @@
     CGContextClip(context);
     drawGlossAndGradient(context, outerRect, outerTop.CGColor, outerBottom.CGColor);
     CGContextRestoreGState(context);
+    
+    
+    CGContextSaveGState(context);
+    CGContextAddPath(context, innerPath);
+    CGContextClip(context);
+    drawGlossAndGradient(context, innerRect, innerTop.CGColor, innerBottom.CGColor);
+    CGContextRestoreGState(context);
+    
+    if (self.state != UIControlStateHighlighted) {
+        CGContextSaveGState(context);
+        CGContextSetLineWidth(context, 4.0);
+        CGContextAddPath(context, outerPath);
+        CGContextAddPath(context, highlightPath);
+        CGContextEOClip(context);
+        drawLinearGradient(context, outerRect, highlightStart.CGColor, highlightStop.CGColor);
+        CGContextRestoreGState(context);
+    }
+    
+    CGContextSaveGState(context);
+    CGContextSetLineWidth(context, 2.0);
+    CGContextSetStrokeColorWithColor(context, blackColor.CGColor);
+    CGContextAddPath(context, outerPath);
+    CGContextRestoreGState(context);
+    
+    CGContextSaveGState(context);
+    CGContextSetLineWidth(context, 2.0);
+    CGContextSetStrokeColorWithColor(context, innerStroke.CGColor);
+    CGContextAddPath(context, innerPath);
+    CGContextClip(context);
+    CGContextAddPath(context, innerPath);
+    CGContextStrokePath(context);
+    CGContextRestoreGState(context);
+    
+    CFRelease(outerPath);
+    CFRelease(innerPath);
+    CFRelease(highlightPath);
     
 }
 
